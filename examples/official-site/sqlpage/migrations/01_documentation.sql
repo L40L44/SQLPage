@@ -63,9 +63,9 @@ INSERT INTO example(component, description, properties) VALUES
         {"title":"Tabler Icons", "image_url": "https://tabler.io/favicon.ico", "description_md":"A set of over **700** free MIT-licensed high-quality **SVG** icons for you to use in your web projects."}
     ]')),
     ('list', 'A beautiful list with bells and whistles.',
-            json('[{"component":"list", "title":"Popular websites" }, '||
-            '{"title":"Google", "link":"https://google.com", "description": "A search engine", "color": "red", "icon":"brand-google", "active": true }, '||
-            '{"title":"Wikipedia", "link":"https://wikipedia.org", "description": "An encyclopedia", "color": "blue", "icon":"world", "edit_link": "?edit=wikipedia", "delete_link": "?delete=wikipedia" }]'));
+            json('[{"component":"list", "title":"Top SQLPage features" }, '||
+            '{"title":"Authentication", "link":"?component=authentication", "description": "Authenticate users with a login form or HTTP basic authentication", "color": "red", "icon":"lock", "active": true }, '||
+            '{"title":"Editing data", "description": "SQLPage makes it easy to UPDATE, INSERT and DELETE data in your database tables", "color": "blue", "icon":"database", "edit_link": "?component=form", "delete_link": "?component=alert" }]'));
 
 INSERT INTO component(name, icon, description) VALUES
     ('datagrid', 'grid-dots', 'Display small pieces of information in a clear and readable way. Each item has a name and is associated with a value.');
@@ -368,7 +368,7 @@ left join my_user_options
     on  my_options.id = my_user_options.option_id
     and my_user_options.user_id = $user_id
 ```
-', json('[{"component":"form", "action":"examples/show_variables.sql"}, 
+', json('[{"component":"form", "action":"examples/show_variables.sql", "reset": "Reset"}, 
     {"label": "Fruits", "name": "fruits[]", "type": "select", "multiple": true, "create_new":true, "placeholder": "Good fruits...", "searchable": true, "description": "press ctrl to select multiple values", "options":
         "[{\"label\": \"Orange\", \"value\": 0, \"selected\": true}, {\"label\": \"Apple\", \"value\": 1}, {\"label\": \"Banana\", \"value\": 3, \"selected\": true}]"}
     ]')),
@@ -667,7 +667,7 @@ to the path of the file you want to include, followed by `?_sqlpage_embed`.
         json('[
             {"component":"card", "title":"A dashboard with multiple graphs on the same line", "columns": 2},
             {"embed": "/examples/chart.sql?color=green&n=42&_sqlpage_embed", "footer_md": "You can find the sql file that generates the chart [here](https://github.com/lovasoa/SQLpage/tree/main/examples/official-site/examples/chart.sql)" },
-            {"embed": "/examples/chart.sql?_sqlpage_embed" },
+            {"embed": "/examples/chart.sql?_sqlpage_embed" }
         ]'));
 
 INSERT INTO component(name, icon, description) VALUES
@@ -694,6 +694,8 @@ INSERT INTO parameter(component, name, description, type, top_level, optional) S
     ('small', 'Whether to use compact table.', 'BOOLEAN', TRUE, TRUE),
     ('description','Description of the table content and helps users with screen readers to find a table and understand what it’s.','TEXT',TRUE,TRUE),
     ('empty_description', 'Text to display if the table does not contain any row. Defaults to "no data".', 'TEXT', TRUE, TRUE),
+    ('freeze_columns', 'Whether to freeze the leftmost column of the table.', 'BOOLEAN', TRUE, TRUE),
+    ('freeze_headers', 'Whether to freeze the top row of the table.', 'BOOLEAN', TRUE, TRUE),
     -- row level
     ('_sqlpage_css_class', 'For advanced users. Sets a css class on the table row. Added in v0.8.0.', 'TEXT', FALSE, TRUE),
     ('_sqlpage_color', 'Sets the background color of the row. Added in v0.8.0.', 'COLOR', FALSE, TRUE),
@@ -739,6 +741,68 @@ INSERT INTO example(component, description, properties) VALUES
     'table',
     'An empty table with a friendly message',
     json('[{"component":"table", "empty_description": "Nothing to see here at the moment."}]')
+    ),
+    (
+    'table',
+    'A large table with many rows and columns, with frozen columns on the left and headers on top. This allows users to browse large datasets without loosing track of their position.',
+    json('[
+    {"component": "table", "freeze_columns": true, "freeze_headers": true},
+    {
+        "feature": "SQL Execution",
+        "description": "Fully compatible with existing databases SQL dialects, executes any SQL query.",
+        "benefits": "Short learning curve, easy to use, interoperable with existing tools."
+    },
+    {
+        "feature": "Data Visualization",
+        "description": "Automatic visualizations of query results: graphs, plots, pie charts, heatmaps, etc.",
+        "benefits": "Quickly analyze data trends, attractive and easy to understand, no external visualization tools or languages to learn."
+    },
+    {
+        "feature": "User Authentication",
+        "description": "Supports user sessions, from basic auth to single sign-on.",
+        "benefits": "Secure, enforces access control policies, and provides a customizable security layer."
+    },
+    {
+        "feature": "APIs",
+        "description": "Allows building JSON REST APIs and integrating with external APIs.",
+        "benefits": "Enables automation and integration with other platforms, facilitates data exchange."
+    },
+    {
+        "feature": "Files",
+        "description": "File uploads, downloads and processing. Supports local filesystem and database storage.",
+        "benefits": "Convenient file management, secure data handling, flexible storage options, integrates with existing systems."
+    },
+    {
+        "feature": "Maps",
+        "description": "Supports GeoJSON and is compatible with GIS data for map visualization.",
+        "benefits": "Geospatial data representation, integrates with geographic information systems."
+    },
+    {
+        "feature": "Custom Components",
+        "description": "Build advanced features using HTML, JavaScript, and CSS.",
+        "benefits": "Tailor-made user experiences, easy to implement custom UI requirements."
+    },
+    {
+        "feature": "Forms",
+        "description": "Insert and update data in databases based on user input.",
+        "benefits": "Simplified data input and management, efficient user interactions with databases."
+    },
+    {
+        "feature": "DB Compatibility",
+        "description": "Works with MySQL, PostgreSQL, SQLite, Microsoft SQL Server and compatible databases.",
+        "benefits": "Broad compatibility with popular database systems, ensures seamless integration."
+    },
+    {
+        "feature": "Security",
+        "description": "Built-in protection against common web vulnerabilities: no SQL injection, no XSS.",
+        "benefits": "Passes audits and security reviews, reduces the risk of data breaches."
+    },
+    {
+        "feature": "Performance",
+        "description": "Designed for performance, with a focus on efficient data processing and minimal overhead.",
+        "benefits": "Quickly processes large datasets, handles high volumes of requests, and minimizes server load."
+    }
+]')
     ),
     (
     'table',
@@ -1036,7 +1100,7 @@ You see the [page layouts demo](./examples/layouts.sql) for a live example of th
                     {"link": "/blog.sql", "title": "Articles", "icon": "book"}
                 ]},
                 {"title": "Examples", "submenu": [
-                    {"link": "/examples/tabs.sql", "title": "Tabs", "icon": "layout-navbar"},
+                    {"link": "/examples/tabs/", "title": "Tabs", "icon": "layout-navbar"},
                     {"link": "/examples/layouts.sql", "title": "Layouts", "icon": "layout"},
                     {"link": "/examples/multistep-form", "title": "Forms", "icon": "edit"},
                     {"link": "/examples/handle_picture_upload.sql", "title": "File uploads", "icon": "upload"},
@@ -1044,7 +1108,7 @@ You see the [page layouts demo](./examples/layouts.sql) for a live example of th
                     {"link": "//github.com/lovasoa/SQLpage/blob/main/examples/", "title": "All examples & demos", "icon": "code"}
                 ]},
                 {"title": "Community", "submenu": [
-                    {"link": "blog.sql", "title": "Blog", "icon": "book"},
+                    {"link": "/blog.sql", "title": "Blog", "icon": "book"},
                     {"link": "//github.com/lovasoa/sqlpage/issues", "title": "Report a bug", "icon": "bug"},
                     {"link": "//github.com/lovasoa/sqlpage/discussions", "title": "Discussions", "icon": "message"},
                     {"link": "//github.com/lovasoa/sqlpage", "title": "Github", "icon": "brand-github"}
@@ -1098,7 +1162,7 @@ and in `shell.json`:
     "menu_item": [
         {"link": "index.sql", "title": "Home"},
         {"title": "Community", "submenu": [
-            {"link": "blog.sql", "title": "Blog"},
+            {"link": "/blog.sql", "title": "Blog"},
             {"link": "//github.com/lovasoa/sqlpage", "title": "Github"}
         ]}
     ]
@@ -1176,8 +1240,8 @@ SELECT
     ''/''                 AS link,
     TRUE                AS fixed_top_menu,
     ''{"title":"About","icon": "settings","submenu":[{"link":"/safety.sql","title":"Security","icon": "logout"},{"link":"/performance.sql","title":"Performance"}]}'' AS menu_item,
-    ''{"title":"Examples","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg","submenu":[{"link":"/examples/tabs.sql","title":"Tabs","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg"},{"link":"/examples/layouts.sql","title":"Layouts"}]}'' AS menu_item,
-    ''{"title":"Examples","size":"sm","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg","submenu":[{"link":"/examples/tabs.sql","title":"Tabs","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg"},{"link":"/examples/layouts.sql","title":"Layouts"}]}'' AS menu_item,
+    ''{"title":"Examples","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg","submenu":[{"link":"/examples/tabs/","title":"Tabs","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg"},{"link":"/examples/layouts.sql","title":"Layouts"}]}'' AS menu_item,
+    ''{"title":"Examples","size":"sm","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg","submenu":[{"link":"/examples/tabs/","title":"Tabs","image": "https://upload.wikimedia.org/wikipedia/en/6/6b/Terrestrial_globe.svg"},{"link":"/examples/layouts.sql","title":"Layouts"}]}'' AS menu_item,
     ''Official [SQLPage](https://sql.datapage.app) documentation'' as footer;
 ```
 ', NULL),

@@ -1,18 +1,27 @@
 <div class="card my-2 {{class}}" {{#if overflow}}style="width: fit-content;"{{/if}} {{#if id}}id="{{id}}"{{/if}}>
-    <div class="card-body">
-        <div class="table-responsive" {{#if (or sort (or search initial_search_value))}}data-pre-init="table"{{/if}}>
-            {{#if (or search initial_search_value)}}
-                <div class="p-2">
-                    <input type="search" class="form-control form-control-rounded fs-6 search" placeholder="Search…"
-                        value="{{initial_search_value}}"
-                    {{#if initial_search_value}}autocomplete="off"{{/if}}
-                    >
-                </div>
-            {{/if}}
-            <table class="table {{#if striped_rows}}table-striped {{/if}}{{#if
-            striped_columns}}table-striped-columns {{/if}}{{#if
-            hover}}table-hover {{/if}}{{#if border}}table-bordered {{/if}}
-            {{#if small}}table-sm {{/if}}">
+    <div class="card-body p-0" {{#if (or sort (or search initial_search_value))}}data-pre-init="table"{{/if}}>
+        {{#if (or search initial_search_value)}}
+        <div class="p-3">
+            <input
+                type="search"
+                class="form-control form-control-rounded fs-6 search"
+                placeholder="Search…"
+                value="{{initial_search_value}}"
+                {{#if initial_search_value}}autocomplete="off"{{/if}}
+            >
+        </div>
+        {{/if}}
+        <div class="table-responsive
+            {{~#if freeze_columns}} table-freeze-columns text-nowrap {{/if~}}
+            {{~#if freeze_headers}} table-freeze-headers text-nowrap {{/if~}}
+        ">
+            <table class="table
+            {{~#if striped_rows}} table-striped {{/if~}}
+            {{~#if striped_columns}} table-striped-columns {{/if~}}
+            {{~#if hover}} table-hover {{/if~}}
+            {{~#if border}} table-bordered {{/if~}}
+            {{~#if small}} table-sm {{/if~}}
+            ">
             {{#if description}}<caption>{{description}}</caption>{{/if}}
                 {{#each_row}}
                     {{#if (eq @row_index 0)}}
@@ -35,7 +44,7 @@
                         </tr>
                         </thead>
                     <tbody class="table-tbody list">{{#delay}}</tbody>{{/delay}}
-                    {{/if}}
+                    {{~/if~}}
 
                     <tr class="{{_sqlpage_css_class}} {{#if _sqlpage_color}}bg-{{_sqlpage_color}}-lt{{/if}}" {{#if _sqlpage_id}}id="{{_sqlpage_id}}"{{/if}}>
                         {{~#each this~}}
@@ -55,7 +64,7 @@
                                 {{~/if~}}
                                 {{~/if~}}
                             </td>
-                            {{~/if~}}
+                            {{/if~}}
                         {{~/each~}}
                     </tr>
                 {{/each_row}}

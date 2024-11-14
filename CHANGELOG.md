@@ -1,9 +1,36 @@
 # CHANGELOG.md
 
-## unreleased
+## 0.31.0 (unreleased)
 - [update apexcharts.js to v4.0.0](https://github.com/apexcharts/apexcharts.js/releases)
-- Fix a bug where the chart library would be loaded multiple times when the page contained multiple charts. This made the page load slower and could cause issues with the chart library.
-- Fix a bug where [timeline chart tooltips displayed the wrong labels](https://github.com/sqlpage/SQLPage/issues/659).
+- Fixed a bug where the chart library would be loaded multiple times when the page contained multiple charts. This made the page load slower and could cause issues with the chart library.
+- Fixed a bug where [timeline chart tooltips displayed the wrong labels](https://github.com/sqlpage/SQLPage/issues/659).
+- Fixed an incorrect warning polluting logs when using sqlpage functions with json arguments in sqlite: `WARN  sqlpage::webserver::database::execute_queries] The column _sqlpage_f0_a1 is missing from the result set, so it cannot be converted to JSON.`.
+- Fixed Microsoft SQL Server driver not being able to read VARCHAR columns from databases with non-european collations.
+- Added support for `BIT` columns in Microsoft SQL Server.
+- Avoid generating file names that contain spaces in `sqlpage.persist_uploaded_file`. This makes it easier to use the file name in URLs without URL-encoding it.
+- Fixed a bug with REAL value decoding in Microsoft SQL Server.
+- Support preserving the timezone of `DATETIMEOFFSET` columns in Microsoft SQL Server and `TIMESTAMPTZ` columns in Postgres. Previously, all datetime columns were converted to UTC.
+- Fixed a bug where select dropdown fields would retain their state when their form is reset.
+- Add support for `null as item` in the columns component to skip the display of an item.
+- Add support for `description_md` in the columns component to display markdown text in an item's description.
+- Add support for simple text item in the columns component. This avoids having to deal with json functions to display a simple textual column item description.
+- Increase spacing between items in the columns component for improved readability.
+- Fixed invalid decoding of some less common data types in Microsoft SQL Server and MySQL.
+- Fixed a display bug where the table search box would disappear when scrolling horizontally in a large table.
+- Remove small blank padding around tables in the table component
+- Fixed a bug in the table component where searching for "xy" would match a row with a cell that contains "x" followed by a cell that contains "y". This should match "x y" but not "xy".
+- Fixed a bug where embedded card contents would be initialized multiple times, potentially causing issues with some components (such as the chart component) when embedded in a card.
+- Fixed misaligned loading spinner in the card component when the card is loading embedded content.
+- Updated the SQL parser to [v0.52.0](https://github.com/apache/datafusion-sqlparser-rs/blob/main/changelog/0.52.0.md).
+  - This fixes a bug where the parser would fail parse a `SET` clause for a variable named `role`.
+  - Better support for the `JSON_TABLE` function, for manipulating json arrays in MySQL.
+  - Adds support for `EXECUTE` statements with parameters in mssql, to run stored procedures.
+  - Adds support for `TRY_CONVERT` in mssql, to convert data types.
+  - Adds support for setting column names with an `=` sign, like `SELECT some_property = (a*b) FROM some_table` in mssql
+  - Adds support for the `LIMIT max_rows, offset` syntax in SQLite. https://www.sqlite.org/lang_select.html#limitoffset
+  - Adds support for `ANY`, `ALL`, and `SOME` subqueries, like `SELECT * FROM t WHERE a = ANY (SELECT b FROM t2)` 
+- Add support for `change_percent` without `description` in the big_number component to display the percentage change of a value.
+- Add support for `freeze_columns` and `freeze_headers` in the table component to freeze columns and headers.
 
 ## 0.30.1 (2024-10-31)
 - fix a bug where table sorting would break if table search was not also enabled.

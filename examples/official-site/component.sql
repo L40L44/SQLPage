@@ -1,15 +1,22 @@
 -- ensure that the component exists and do not render this page if it does not
 select 'redirect' as component,
-    'component_not_found.sql?component=' || sqlpage.url_encode($component) as link
-where $component is not null and not exists (select 1 from component where name = $component);
+    'component_not_found.sql' || coalesce('?component=' || sqlpage.url_encode($component), '') as link
+where not exists (select 1 from component where name = $component);
 
 -- This line, at the top of the page, tells web browsers to keep the page locally in cache once they have it.
-select 'http_header' as component, 'public, max-age=600, stale-while-revalidate=3600, stale-if-error=86400' as "Cache-Control";
+select 'http_header' as component, 
+    'public, max-age=600, stale-while-revalidate=3600, stale-if-error=86400' as "Cache-Control",
+    printf('<%s>; rel="canonical"', sqlpage.link('component.sql', json_object('component', $component))) as "Link";
 
 select 'dynamic' as component, json_patch(json_extract(properties, '$[0]'), json_object(
     'title', coalesce($component || ' - ', '') || 'SQLPage Documentation'
 )) as properties
 FROM example WHERE component = 'shell' LIMIT 1;
+
+select 'breadcrumb' as component;
+select 'SQLPage' as title, '/' as link, 'Home page' as description;
+select 'Components' as title, '/documentation.sql' as link, 'List of all components' as description;
+select $component as title, '/component.sql?component=' || sqlpage.url_encode($component) as link;
 
 select 'text' as component, 'component' as id,
     format('# The **%s** component
