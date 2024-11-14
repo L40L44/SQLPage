@@ -44,3 +44,4 @@ jobs:
         name: playwright-report
         path: ./tests/end-to-end/playwright-report/
         retention-days: 30
+[![End to end Tests](https://github.com/L40L44/SQLPage/actions/workflows/playwright.yml/badge.svg)](https://github.com/L40L44/SQLPage/actions/workflows/playwright.yml)
